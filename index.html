@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Type Arena | Cyberpunk Typing Master</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Audiowide&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,7 +15,6 @@
             --acid-green: #7fff00;
             --deep-charcoal: #0a0a12;
             --dark-gray: #1a1a2e;
-            --grid-color: rgba(255, 47, 255, 0.05);
         }
 
         * {
@@ -24,11 +24,16 @@
             font-family: 'Exo 2', sans-serif;
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
         body {
             background-color: #000;
             color: white;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
 
@@ -81,9 +86,12 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
@@ -129,25 +137,25 @@
         }
 
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             gap: 30px;
         }
 
         .mode-selector {
             display: flex;
             gap: 15px;
-            margin-bottom: 30px;
         }
 
         .mode-btn {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             background: rgba(26, 26, 46, 0.8);
             border: 1px solid var(--electric-blue);
             color: white;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 5px;
@@ -165,30 +173,42 @@
         }
 
         .typing-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             background: rgba(26, 26, 46, 0.7);
             border: 1px solid var(--neon-purple);
             border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
+            padding: 30px;
             box-shadow: 0 0 20px rgba(157, 77, 255, 0.3);
         }
 
         .typing-prompt {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             line-height: 1.6;
-            margin-bottom: 25px;
-            min-height: 150px;
+            margin-bottom: 30px;
+            min-height: 200px;
             font-family: 'Exo 2', sans-serif;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .typing-input-container {
+            margin-top: auto;
         }
 
         .typing-input {
             width: 100%;
-            padding: 15px;
+            padding: 20px;
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid var(--acid-green);
             border-radius: 5px;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-family: 'Exo 2', sans-serif;
             resize: none;
             outline: none;
@@ -198,187 +218,62 @@
             box-shadow: 0 0 15px var(--acid-green);
         }
 
-        .keyboard {
-            background: rgba(26, 26, 46, 0.8);
-            border: 1px solid var(--neon-pink);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 20px rgba(255, 47, 255, 0.2);
-        }
-
-        .keyboard-row {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .key {
-            width: 50px;
-            height: 50px;
-            margin: 3px;
-            background: rgba(10, 10, 18, 0.9);
-            border: 1px solid var(--electric-blue);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            transition: all 0.1s ease;
-            box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
-        }
-
-        .key.active {
-            background: var(--neon-pink);
-            box-shadow: 0 0 15px var(--neon-pink);
-            transform: scale(0.95);
-        }
-
-        .key.finger-pinky {
-            border-color: var(--neon-pink);
-        }
-
-        .key.finger-ring {
-            border-color: var(--electric-blue);
-        }
-
-        .key.finger-middle {
-            border-color: var(--neon-cyan);
-        }
-
-        .key.finger-index {
-            border-color: var(--acid-green);
-        }
-
-        .key.finger-thumb {
-            border-color: var(--neon-purple);
-        }
-
         .stats-panel {
             background: rgba(26, 26, 46, 0.7);
             border: 1px solid var(--neon-cyan);
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
+            padding: 25px;
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
         }
 
         .stats-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
             text-align: center;
             color: var(--neon-cyan);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
         }
 
         .stat-box {
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid var(--electric-blue);
             border-radius: 5px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
         }
 
         .stat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin: 10px 0;
+            font-size: 2.2rem;
+            margin: 15px 0;
             color: var(--acid-green);
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #aaa;
-        }
-
-        .leaderboard-panel {
-            background: rgba(26, 26, 46, 0.7);
-            border: 1px solid var(--neon-purple);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(157, 77, 255, 0.3);
-        }
-
-        .leaderboard-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            text-align: center;
-            color: var(--neon-purple);
-        }
-
-        .leaderboard-tabs {
-            display: flex;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--neon-purple);
-        }
-
-        .leaderboard-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .leaderboard-tab.active {
-            background: rgba(157, 77, 255, 0.2);
-            border-bottom: 2px solid var(--neon-purple);
-        }
-
-        .leaderboard-list {
-            list-style: none;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .leaderboard-item:last-child {
-            border-bottom: none;
-        }
-
-        .leaderboard-rank {
-            width: 30px;
-            text-align: center;
-            font-weight: bold;
-            color: var(--neon-cyan);
-        }
-
-        .leaderboard-name {
-            flex: 1;
-            padding: 0 10px;
-        }
-
-        .leaderboard-score {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--acid-green);
         }
 
         .auth-panel {
             background: rgba(26, 26, 46, 0.9);
             border: 1px solid var(--neon-pink);
             border-radius: 10px;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 47, 255, 0.3);
-            max-width: 400px;
-            margin: 100px auto;
+            max-width: 500px;
+            margin: auto;
         }
 
         .auth-title {
             font-family: 'Audiowide', cursive;
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             background: linear-gradient(90deg, var(--neon-pink), var(--electric-blue));
             -webkit-background-clip: text;
@@ -390,10 +285,10 @@
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid var(--electric-blue);
             color: white;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border-radius: 5px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 20px;
@@ -440,7 +335,7 @@
             background: rgba(10, 10, 18, 0.95);
             border: 2px solid var(--acid-green);
             border-radius: 10px;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
             z-index: 1000;
             box-shadow: 0 0 30px var(--acid-green);
@@ -450,15 +345,15 @@
 
         .popup-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            font-size: 2rem;
+            margin-bottom: 30px;
             color: var(--acid-green);
         }
 
         .popup-stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
+            margin: 30px 0;
         }
 
         .popup-stat {
@@ -467,13 +362,13 @@
 
         .popup-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--neon-cyan);
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         .popup-label {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #aaa;
         }
 
@@ -481,12 +376,13 @@
             background: rgba(10, 10, 18, 0.8);
             border: 1px solid var(--electric-blue);
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             border-radius: 5px;
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 20px;
+            font-size: 1.1rem;
         }
 
         .popup-close:hover {
@@ -497,7 +393,7 @@
         footer {
             text-align: center;
             padding: 20px;
-            margin-top: 40px;
+            margin-top: 20px;
             border-top: 1px solid var(--neon-cyan);
             color: #aaa;
             font-size: 0.9rem;
@@ -661,10 +557,6 @@
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
             .logo {
                 font-size: 1.8rem;
             }
@@ -675,17 +567,16 @@
             }
             
             .typing-prompt {
-                font-size: 1.2rem;
-            }
-            
-            .key {
-                width: 30px;
-                height: 30px;
-                font-size: 0.7rem;
+                font-size: 1.4rem;
             }
             
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .mode-btn {
+                padding: 15px;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -700,7 +591,7 @@
         <!-- Authentication Panel (shown when not logged in) -->
         <div id="authPanel" class="auth-panel">
             <h1 class="auth-title glitch" data-text="TYPE ARENA">TYPE ARENA</h1>
-            <p>Enter the cyberpunk typing dojo. Master your skills and climb the leaderboards.</p>
+            <p>Enter the cyberpunk typing dojo. Master your skills in the digital arena.</p>
             <button id="googleLogin" class="auth-btn">Login with Google</button>
         </div>
         
@@ -714,138 +605,40 @@
             </header>
             
             <div class="main-content">
-                <div class="left-column">
-                    <div class="mode-selector">
-                        <button id="tutorMode" class="mode-btn active">Tutor Mode</button>
-                        <button id="speedTestMode" class="mode-btn">Speed Test</button>
+                <div class="mode-selector">
+                    <button id="tutorMode" class="mode-btn active">Tutor Mode</button>
+                    <button id="speedTestMode" class="mode-btn">Speed Test</button>
+                </div>
+                
+                <div class="typing-area">
+                    <div class="typing-prompt" id="typingPrompt">
+                        Welcome to Type Arena! Start typing the text above to begin your training.
+                        Your goal is to type accurately and quickly. Focus on proper technique.
                     </div>
-                    
-                    <div class="typing-area">
-                        <div class="typing-prompt" id="typingPrompt">
-                            Welcome to Type Arena! Start typing the text above to begin your training.
-                            Your goal is to type accurately and quickly. Focus on proper finger placement.
-                        </div>
+                    <div class="typing-input-container">
                         <textarea class="typing-input" id="typingInput" placeholder="Start typing here..."></textarea>
-                    </div>
-                    
-                    <div class="keyboard">
-                        <div class="keyboard-row">
-                            <div class="key finger-pinky" data-key="`">`</div>
-                            <div class="key finger-pinky" data-key="1">1</div>
-                            <div class="key finger-ring" data-key="2">2</div>
-                            <div class="key finger-middle" data-key="3">3</div>
-                            <div class="key finger-index" data-key="4">4</div>
-                            <div class="key finger-index" data-key="5">5</div>
-                            <div class="key finger-index" data-key="6">6</div>
-                            <div class="key finger-middle" data-key="7">7</div>
-                            <div class="key finger-ring" data-key="8">8</div>
-                            <div class="key finger-pinky" data-key="9">9</div>
-                            <div class="key finger-pinky" data-key="0">0</div>
-                            <div class="key finger-pinky" data-key="-">-</div>
-                            <div class="key finger-pinky" data-key="=">=</div>
-                        </div>
-                        <div class="keyboard-row">
-                            <div class="key finger-pinky" data-key="q">Q</div>
-                            <div class="key finger-pinky" data-key="w">W</div>
-                            <div class="key finger-ring" data-key="e">E</div>
-                            <div class="key finger-middle" data-key="r">R</div>
-                            <div class="key finger-index" data-key="t">T</div>
-                            <div class="key finger-index" data-key="y">Y</div>
-                            <div class="key finger-index" data-key="u">U</div>
-                            <div class="key finger-middle" data-key="i">I</div>
-                            <div class="key finger-ring" data-key="o">O</div>
-                            <div class="key finger-pinky" data-key="p">P</div>
-                            <div class="key finger-pinky" data-key="[">[</div>
-                            <div class="key finger-pinky" data-key="]">]</div>
-                            <div class="key finger-pinky" data-key="\\">\\</div>
-                        </div>
-                        <div class="keyboard-row">
-                            <div class="key finger-pinky" data-key="a">A</div>
-                            <div class="key finger-pinky" data-key="s">S</div>
-                            <div class="key finger-ring" data-key="d">D</div>
-                            <div class="key finger-middle" data-key="f">F</div>
-                            <div class="key finger-index" data-key="g">G</div>
-                            <div class="key finger-index" data-key="h">H</div>
-                            <div class="key finger-index" data-key="j">J</div>
-                            <div class="key finger-middle" data-key="k">K</div>
-                            <div class="key finger-ring" data-key="l">L</div>
-                            <div class="key finger-pinky" data-key=";">;</div>
-                            <div class="key finger-pinky" data-key="'">'</div>
-                        </div>
-                        <div class="keyboard-row">
-                            <div class="key finger-pinky" data-key="z">Z</div>
-                            <div class="key finger-pinky" data-key="x">X</div>
-                            <div class="key finger-ring" data-key="c">C</div>
-                            <div class="key finger-middle" data-key="v">V</div>
-                            <div class="key finger-index" data-key="b">B</div>
-                            <div class="key finger-index" data-key="n">N</div>
-                            <div class="key finger-index" data-key="m">M</div>
-                            <div class="key finger-middle" data-key=",">,</div>
-                            <div class="key finger-ring" data-key=".">.</div>
-                            <div class="key finger-pinky" data-key="/">/</div>
-                        </div>
-                        <div class="keyboard-row">
-                            <div class="key finger-thumb" data-key=" " style="width: 300px;">SPACE</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stats-panel">
-                        <h2 class="stats-title">PERFORMANCE METRICS</h2>
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-label">Words Per Minute</div>
-                                <div class="stat-value" id="wpmValue">0</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Accuracy</div>
-                                <div class="stat-value" id="accuracyValue">100%</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Time Elapsed</div>
-                                <div class="stat-value" id="timeValue">0s</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Characters</div>
-                                <div class="stat-value" id="charsValue">0</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
-                <div class="right-column">
-                    <div class="leaderboard-panel">
-                        <h2 class="leaderboard-title">LEADERBOARDS</h2>
-                        <div class="leaderboard-tabs">
-                            <div class="leaderboard-tab active" data-tab="wpm">Fastest Typers</div>
-                            <div class="leaderboard-tab" data-tab="accuracy">Accuracy Leaders</div>
+                <div class="stats-panel">
+                    <h2 class="stats-title">PERFORMANCE METRICS</h2>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Words Per Minute</div>
+                            <div class="stat-value" id="wpmValue">0</div>
                         </div>
-                        <ul class="leaderboard-list" id="leaderboardList">
-                            <li class="leaderboard-item">
-                                <span class="leaderboard-rank">1</span>
-                                <span class="leaderboard-name">NeonNinja</span>
-                                <span class="leaderboard-score">128 WPM</span>
-                            </li>
-                            <li class="leaderboard-item">
-                                <span class="leaderboard-rank">2</span>
-                                <span class="leaderboard-name">CyberSamurai</span>
-                                <span class="leaderboard-score">115 WPM</span>
-                            </li>
-                            <li class="leaderboard-item">
-                                <span class="leaderboard-rank">3</span>
-                                <span class="leaderboard-name">GlitchMaster</span>
-                                <span class="leaderboard-score">104 WPM</span>
-                            </li>
-                            <li class="leaderboard-item">
-                                <span class="leaderboard-rank">4</span>
-                                <span class="leaderboard-name">ByteRunner</span>
-                                <span class="leaderboard-score">98 WPM</span>
-                            </li>
-                            <li class="leaderboard-item">
-                                <span class="leaderboard-rank">5</span>
-                                <span class="leaderboard-name">DataDrifter</span>
-                                <span class="leaderboard-score">92 WPM</span>
-                            </li>
-                        </ul>
+                        <div class="stat-box">
+                            <div class="stat-label">Accuracy</div>
+                            <div class="stat-value" id="accuracyValue">100%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Time Elapsed</div>
+                            <div class="stat-value" id="timeValue">0s</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Characters</div>
+                            <div class="stat-value" id="charsValue">0</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -932,9 +725,6 @@
         const popupWpm = document.getElementById('popupWpm');
         const popupAccuracy = document.getElementById('popupAccuracy');
         const popupClose = document.getElementById('popupClose');
-        const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
-        const leaderboardList = document.getElementById('leaderboardList');
-        const keys = document.querySelectorAll('.key');
 
         // Sample texts for typing
         const sampleTexts = {
@@ -954,19 +744,12 @@
             tutorMode.addEventListener('click', () => switchMode('tutor'));
             speedTestMode.addEventListener('click', () => switchMode('speedtest'));
             typingInput.addEventListener('input', handleTypingInput);
-            typingInput.addEventListener('keydown', handleKeyDown);
-            typingInput.addEventListener('keyup', handleKeyUp);
             popupClose.addEventListener('click', closeResultPopup);
-            
-            leaderboardTabs.forEach(tab => {
-                tab.addEventListener('click', () => switchLeaderboardTab(tab.dataset.tab));
-            });
 
             // Set initial typing prompt
             updateTypingPrompt('letters');
             
             // Simulate user login for demo purposes
-            // In a real app, this would be handled by Firebase Auth
             simulateLogin();
         }
 
@@ -989,7 +772,6 @@
         // Handle Google login
         function handleGoogleLogin() {
             // In a real implementation, this would use Firebase Auth
-            // For demo purposes, we'll simulate a login
             simulateLogin();
             
             // Show a glitch effect
@@ -1023,7 +805,7 @@
         function showSpeedTestOptions() {
             typingPrompt.innerHTML = `
                 <h3>SELECT TEST DURATION</h3>
-                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap;">
                     <button class="mode-btn" data-duration="30">30 SECONDS</button>
                     <button class="mode-btn" data-duration="60">1 MINUTE</button>
                     <button class="mode-btn" data-duration="120">2 MINUTES</button>
@@ -1118,28 +900,6 @@
             }
         }
 
-        // Handle key down events for keyboard visualization
-        function handleKeyDown(e) {
-            const key = e.key.toLowerCase();
-            const keyElement = document.querySelector(`.key[data-key="${key}"]`) || 
-                              document.querySelector(`.key[data-key=" "]`);
-            
-            if (keyElement) {
-                keyElement.classList.add('active');
-            }
-        }
-
-        // Handle key up events for keyboard visualization
-        function handleKeyUp(e) {
-            const key = e.key.toLowerCase();
-            const keyElement = document.querySelector(`.key[data-key="${key}"]`) || 
-                              document.querySelector(`.key[data-key=" "]`);
-            
-            if (keyElement) {
-                keyElement.classList.remove('active');
-            }
-        }
-
         // Update statistics display
         function updateStats() {
             wpmValue.textContent = appState.wpm;
@@ -1155,8 +915,6 @@
             
             // Show result popup
             showResultPopup();
-            
-            // In a real app, save results to Firebase
         }
 
         // Show the result popup
@@ -1221,71 +979,6 @@
             typingInput.value = '';
             typingInput.disabled = false;
             updateStats();
-        }
-
-        // Switch between leaderboard tabs
-        function switchLeaderboardTab(tab) {
-            leaderboardTabs.forEach(t => t.classList.remove('active'));
-            document.querySelector(`.leaderboard-tab[data-tab="${tab}"]`).classList.add('active');
-            
-            // Update leaderboard content
-            if (tab === 'wpm') {
-                leaderboardList.innerHTML = `
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">1</span>
-                        <span class="leaderboard-name">NeonNinja</span>
-                        <span class="leaderboard-score">128 WPM</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">2</span>
-                        <span class="leaderboard-name">CyberSamurai</span>
-                        <span class="leaderboard-score">115 WPM</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">3</span>
-                        <span class="leaderboard-name">GlitchMaster</span>
-                        <span class="leaderboard-score">104 WPM</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">4</span>
-                        <span class="leaderboard-name">ByteRunner</span>
-                        <span class="leaderboard-score">98 WPM</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">5</span>
-                        <span class="leaderboard-name">DataDrifter</span>
-                        <span class="leaderboard-score">92 WPM</span>
-                    </li>
-                `;
-            } else {
-                leaderboardList.innerHTML = `
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">1</span>
-                        <span class="leaderboard-name">AccuracyMaster</span>
-                        <span class="leaderboard-score">99.8%</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">2</span>
-                        <span class="leaderboard-name">PrecisionPro</span>
-                        <span class="leaderboard-score">99.5%</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">3</span>
-                        <span class="leaderboard-name">ErrorHunter</span>
-                        <span class="leaderboard-score">99.2%</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">4</span>
-                        <span class="leaderboard-name">FlawlessTyper</span>
-                        <span class="leaderboard-score">98.9%</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <span class="leaderboard-rank">5</span>
-                        <span class="leaderboard-name">PerfectStrike</span>
-                        <span class="leaderboard-score">98.5%</span>
-                    </li>
-                `;
-            }
         }
 
         // Initialize the app when the DOM is loaded
