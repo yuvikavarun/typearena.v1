@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Arena | Cyberpunk Typing Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Audiowide&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff2fff;
+            --electric-blue: #00e5ff;
+            --neon-cyan: #00ffcc;
+            --neon-purple: #9d4dff;
+            --acid-green: #7fff00;
+            --deep-charcoal: #0a0a12;
+            --dark-gray: #1a1a2e;
+            --grid-color: rgba(255, 47, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Star Wars Space Background */
+        .space {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #000011 0%, #000033 100%);
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotateX(75deg);
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .star:nth-child(3n) {
+            background-color: #9eeaff;
+            animation-duration: 4s;
+        }
+
+        .star:nth-child(5n) {
+            background-color: #ff9eea;
+            animation-duration: 6s;
+        }
+
+        .star:nth-child(7n) {
+            background-color: #9effae;
+            animation-duration: 7s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 47, 255, 0.3);
+            margin-bottom: 30px;
+            background: rgba(10, 10, 18, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .logo {
+            font-family: 'Audiowide', cursive;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--neon-pink), var(--electric-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 47, 255, 0.5);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--neon-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--electric-blue);
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid var(--electric-blue);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .mode-btn.active {
+            background: rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 15px var(--electric-blue);
+            border-color: var(--neon-cyan);
+        }
+
+        .mode-btn:hover:not(.active) {
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        .typing-area {
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(157, 77, 255, 0.3);
+        }
+
+        .typing-prompt {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            min-height: 150px;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .typing-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid var(--acid-green);
+            border-radius: 5px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Exo 2', sans-serif;
+            resize: none;
+            outline: none;
+        }
+
+        .typing-input:focus {
+            box-shadow: 0 0 15px var(--acid-green);
+        }
+
+        .keyboard {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(255, 47, 255, 0.2);
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .key {
+            width: 50px;
+            height: 50px;
+            margin: 3px;
+            background: rgba(10, 10, 18, 0.9);
+            border: 1px solid var(--electric-blue);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.1s ease;
+            box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+        }
+
+        .key.active {
+            background: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+            transform: scale(0.95);
+        }
+
+        .key.finger-pinky {
+            border-color: var(--neon-pink);
+        }
+
+        .key.finger-ring {
+            border-color: var(--electric-blue);
+        }
+
+        .key.finger-middle {
+            border-color: var(--neon-cyan);
+        }
+
+        .key.finger-index {
+            border-color: var(--acid-green);
+        }
+
+        .key.finger-thumb {
+            border-color: var(--neon-purple);
+        }
+
+        .stats-panel {
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+        }
+
+        .stats-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--neon-cyan);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid var(--electric-blue);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin: 10px 0;
+            color: var(--acid-green);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .leaderboard-panel {
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(157, 77, 255, 0.3);
+        }
+
+        .leaderboard-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--neon-purple);
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--neon-purple);
+        }
+
+        .leaderboard-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-tab.active {
+            background: rgba(157, 77, 255, 0.2);
+            border-bottom: 2px solid var(--neon-purple);
+        }
+
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            width: 30px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--neon-cyan);
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .leaderboard-score {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--acid-green);
+        }
+
+        .auth-panel {
+            background: rgba(26, 26, 46, 0.9);
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 47, 255, 0.3);
+            max-width: 400px;
+            margin: 100px auto;
+        }
+
+        .auth-title {
+            font-family: 'Audiowide', cursive;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--electric-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .auth-btn {
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid var(--electric-blue);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .auth-btn:hover {
+            background: rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 15px var(--electric-blue);
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-pink);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--electric-blue);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        .holographic-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 18, 0.95);
+            border: 2px solid var(--acid-green);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 30px var(--acid-green);
+            animation: hologram 3s ease;
+            display: none;
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--acid-green);
+        }
+
+        .popup-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .popup-stat {
+            text-align: center;
+        }
+
+        .popup-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            margin: 10px 0;
+        }
+
+        .popup-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .popup-close {
+            background: rgba(10, 10, 18, 0.8);
+            border: 1px solid var(--electric-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .popup-close:hover {
+            background: rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 10px var(--electric-blue);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid var(--neon-cyan);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(42px, 9999px, 44px, 0);
+            }
+            5% {
+                clip: rect(12px, 9999px, 59px, 0);
+            }
+            10% {
+                clip: rect(48px, 9999px, 29px, 0);
+            }
+            15% {
+                clip: rect(42px, 9999px, 73px, 0);
+            }
+            20% {
+                clip: rect(63px, 9999px, 27px, 0);
+            }
+            25% {
+                clip: rect(34px, 9999px, 55px, 0);
+            }
+            30% {
+                clip: rect(86px, 9999px, 73px, 0);
+            }
+            35% {
+                clip: rect(20px, 9999px, 20px, 0);
+            }
+            40% {
+                clip: rect(26px, 9999px, 60px, 0);
+            }
+            45% {
+                clip: rect(25px, 9999px, 66px, 0);
+            }
+            50% {
+                clip: rect(57px, 9999px, 98px, 0);
+            }
+            55% {
+                clip: rect(5px, 9999px, 46px, 0);
+            }
+            60% {
+                clip: rect(82px, 9999px, 31px, 0);
+            }
+            65% {
+                clip: rect(54px, 9999px, 27px, 0);
+            }
+            70% {
+                clip: rect(28px, 9999px, 99px, 0);
+            }
+            75% {
+                clip: rect(45px, 9999px, 69px, 0);
+            }
+            80% {
+                clip: rect(23px, 9999px, 85px, 0);
+            }
+            85% {
+                clip: rect(54px, 9999px, 84px, 0);
+            }
+            90% {
+                clip: rect(45px, 9999px, 47px, 0);
+            }
+            95% {
+                clip: rect(37px, 9999px, 20px, 0);
+            }
+            100% {
+                clip: rect(4px, 9999px, 91px, 0);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+            5% {
+                clip: rect(52px, 9999px, 74px, 0);
+            }
+            10% {
+                clip: rect(79px, 9999px, 85px, 0);
+            }
+            15% {
+                clip: rect(75px, 9999px, 5px, 0);
+            }
+            20% {
+                clip: rect(67px, 9999px, 61px, 0);
+            }
+            25% {
+                clip: rect(14px, 9999px, 79px, 0);
+            }
+            30% {
+                clip: rect(1px, 9999px, 66px, 0);
+            }
+            35% {
+                clip: rect(86px, 9999px, 30px, 0);
+            }
+            40% {
+                clip: rect(23px, 9999px, 98px, 0);
+            }
+            45% {
+                clip: rect(85px, 9999px, 72px, 0);
+            }
+            50% {
+                clip: rect(71px, 9999px, 75px, 0);
+            }
+            55% {
+                clip: rect(2px, 9999px, 48px, 0);
+            }
+            60% {
+                clip: rect(30px, 9999px, 16px, 0);
+            }
+            65% {
+                clip: rect(59px, 9999px, 50px, 0);
+            }
+            70% {
+                clip: rect(41px, 9999px, 62px, 0);
+            }
+            75% {
+                clip: rect(2px, 9999px, 82px, 0);
+            }
+            80% {
+                clip: rect(47px, 9999px, 73px, 0);
+            }
+            85% {
+                clip: rect(3px, 9999px, 27px, 0);
+            }
+            90% {
+                clip: rect(26px, 9999px, 55px, 0);
+            }
+            95% {
+                clip: rect(42px, 9999px, 97px, 0);
+            }
+            100% {
+                clip: rect(38px, 9999px, 49px, 0);
+            }
+        }
+
+        @keyframes hologram {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+            80% {
+                transform: translate(-50%, -50%) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .typing-prompt {
+                font-size: 1.2rem;
+            }
+            
+            .key {
+                width: 30px;
+                height: 30px;
+                font-size: 0.7rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Star Wars Space Background -->
+    <div class="space">
+        <div class="stars" id="stars"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Authentication Panel (shown when not logged in) -->
+        <div id="authPanel" class="auth-panel">
+            <h1 class="auth-title glitch" data-text="TYPE ARENA">TYPE ARENA</h1>
+            <p>Enter the cyberpunk typing dojo. Master your skills and climb the leaderboards.</p>
+            <button id="googleLogin" class="auth-btn">Login with Google</button>
+        </div>
+        
+        <!-- Main App (shown when logged in) -->
+        <div id="app" style="display: none;">
+            <header>
+                <div class="logo glitch" data-text="TYPE ARENA">TYPE ARENA</div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                </div>
+            </header>
+            
+            <div class="main-content">
+                <div class="left-column">
+                    <div class="mode-selector">
+                        <button id="tutorMode" class="mode-btn active">Tutor Mode</button>
+                        <button id="speedTestMode" class="mode-btn">Speed Test</button>
+                    </div>
+                    
+                    <div class="typing-area">
+                        <div class="typing-prompt" id="typingPrompt">
+                            Welcome to Type Arena! Start typing the text above to begin your training.
+                            Your goal is to type accurately and quickly. Focus on proper finger placement.
+                        </div>
+                        <textarea class="typing-input" id="typingInput" placeholder="Start typing here..."></textarea>
+                    </div>
+                    
+                    <div class="keyboard">
+                        <div class="keyboard-row">
+                            <div class="key finger-pinky" data-key="`">`</div>
+                            <div class="key finger-pinky" data-key="1">1</div>
+                            <div class="key finger-ring" data-key="2">2</div>
+                            <div class="key finger-middle" data-key="3">3</div>
+                            <div class="key finger-index" data-key="4">4</div>
+                            <div class="key finger-index" data-key="5">5</div>
+                            <div class="key finger-index" data-key="6">6</div>
+                            <div class="key finger-middle" data-key="7">7</div>
+                            <div class="key finger-ring" data-key="8">8</div>
+                            <div class="key finger-pinky" data-key="9">9</div>
+                            <div class="key finger-pinky" data-key="0">0</div>
+                            <div class="key finger-pinky" data-key="-">-</div>
+                            <div class="key finger-pinky" data-key="=">=</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="key finger-pinky" data-key="q">Q</div>
+                            <div class="key finger-pinky" data-key="w">W</div>
+                            <div class="key finger-ring" data-key="e">E</div>
+                            <div class="key finger-middle" data-key="r">R</div>
+                            <div class="key finger-index" data-key="t">T</div>
+                            <div class="key finger-index" data-key="y">Y</div>
+                            <div class="key finger-index" data-key="u">U</div>
+                            <div class="key finger-middle" data-key="i">I</div>
+                            <div class="key finger-ring" data-key="o">O</div>
+                            <div class="key finger-pinky" data-key="p">P</div>
+                            <div class="key finger-pinky" data-key="[">[</div>
+                            <div class="key finger-pinky" data-key="]">]</div>
+                            <div class="key finger-pinky" data-key="\\">\\</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="key finger-pinky" data-key="a">A</div>
+                            <div class="key finger-pinky" data-key="s">S</div>
+                            <div class="key finger-ring" data-key="d">D</div>
+                            <div class="key finger-middle" data-key="f">F</div>
+                            <div class="key finger-index" data-key="g">G</div>
+                            <div class="key finger-index" data-key="h">H</div>
+                            <div class="key finger-index" data-key="j">J</div>
+                            <div class="key finger-middle" data-key="k">K</div>
+                            <div class="key finger-ring" data-key="l">L</div>
+                            <div class="key finger-pinky" data-key=";">;</div>
+                            <div class="key finger-pinky" data-key="'">'</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="key finger-pinky" data-key="z">Z</div>
+                            <div class="key finger-pinky" data-key="x">X</div>
+                            <div class="key finger-ring" data-key="c">C</div>
+                            <div class="key finger-middle" data-key="v">V</div>
+                            <div class="key finger-index" data-key="b">B</div>
+                            <div class="key finger-index" data-key="n">N</div>
+                            <div class="key finger-index" data-key="m">M</div>
+                            <div class="key finger-middle" data-key=",">,</div>
+                            <div class="key finger-ring" data-key=".">.</div>
+                            <div class="key finger-pinky" data-key="/">/</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="key finger-thumb" data-key=" " style="width: 300px;">SPACE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-panel">
+                        <h2 class="stats-title">PERFORMANCE METRICS</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">Words Per Minute</div>
+                                <div class="stat-value" id="wpmValue">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Accuracy</div>
+                                <div class="stat-value" id="accuracyValue">100%</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Time Elapsed</div>
+                                <div class="stat-value" id="timeValue">0s</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Characters</div>
+                                <div class="stat-value" id="charsValue">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="right-column">
+                    <div class="leaderboard-panel">
+                        <h2 class="leaderboard-title">LEADERBOARDS</h2>
+                        <div class="leaderboard-tabs">
+                            <div class="leaderboard-tab active" data-tab="wpm">Fastest Typers</div>
+                            <div class="leaderboard-tab" data-tab="accuracy">Accuracy Leaders</div>
+                        </div>
+                        <ul class="leaderboard-list" id="leaderboardList">
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">1</span>
+                                <span class="leaderboard-name">NeonNinja</span>
+                                <span class="leaderboard-score">128 WPM</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">2</span>
+                                <span class="leaderboard-name">CyberSamurai</span>
+                                <span class="leaderboard-score">115 WPM</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">3</span>
+                                <span class="leaderboard-name">GlitchMaster</span>
+                                <span class="leaderboard-score">104 WPM</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">4</span>
+                                <span class="leaderboard-name">ByteRunner</span>
+                                <span class="leaderboard-score">98 WPM</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">5</span>
+                                <span class="leaderboard-name">DataDrifter</span>
+                                <span class="leaderboard-score">92 WPM</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>Made by Yuvika Varun</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Holographic Popup for Results -->
+    <div id="resultPopup" class="holographic-popup">
+        <h2 class="popup-title">TEST COMPLETE</h2>
+        <div class="popup-stats">
+            <div class="popup-stat">
+                <div class="popup-label">WPM</div>
+                <div class="popup-value" id="popupWpm">0</div>
+            </div>
+            <div class="popup-stat">
+                <div class="popup-label">Accuracy</div>
+                <div class="popup-value" id="popupAccuracy">100%</div>
+            </div>
+        </div>
+        <button class="popup-close" id="popupClose">CONTINUE</button>
+    </div>
+
+    <script>
+        // Create starfield background
+        function createStarfield() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // App State
+        const appState = {
+            user: null,
+            mode: 'tutor', // 'tutor' or 'speedtest'
+            timer: null,
+            timeElapsed: 0,
+            wpm: 0,
+            accuracy: 100,
+            charsTyped: 0,
+            errors: 0,
+            isTyping: false,
+            testDuration: 60 // Default to 1 minute for speed test
+        };
+
+        // DOM Elements
+        const authPanel = document.getElementById('authPanel');
+        const app = document.getElementById('app');
+        const googleLogin = document.getElementById('googleLogin');
+        const userAvatar = document.getElementById('userAvatar');
+        const tutorMode = document.getElementById('tutorMode');
+        const speedTestMode = document.getElementById('speedTestMode');
+        const typingPrompt = document.getElementById('typingPrompt');
+        const typingInput = document.getElementById('typingInput');
+        const wpmValue = document.getElementById('wpmValue');
+        const accuracyValue = document.getElementById('accuracyValue');
+        const timeValue = document.getElementById('timeValue');
+        const charsValue = document.getElementById('charsValue');
+        const resultPopup = document.getElementById('resultPopup');
+        const popupWpm = document.getElementById('popupWpm');
+        const popupAccuracy = document.getElementById('popupAccuracy');
+        const popupClose = document.getElementById('popupClose');
+        const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const keys = document.querySelectorAll('.key');
+
+        // Sample texts for typing
+        const sampleTexts = {
+            letters: "asdf jkl; asdf jkl; asdf jkl; asdf jkl; asdf jkl; asdf jkl;",
+            words: "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.",
+            sentences: "In a world driven by data, typing speed becomes a valuable asset. The neon lights of the city never sleep, just like the relentless flow of information. Cybernetics have enhanced human capabilities beyond imagination.",
+            paragraphs: "The year is 2077. Megacorporations rule the world from their towering skyscrapers, while the masses struggle in the neon-drenched streets below. Hackers dive into the datastream, their fingers flying across keyboards as they breach firewalls and extract valuable intel. In this digital age, your ability to type quickly and accurately could mean the difference between success and obsolescence. Every keystroke matters in the race for information supremacy."
+        };
+
+        // Initialize the app
+        function initApp() {
+            // Create starfield background
+            createStarfield();
+            
+            // Set up event listeners
+            googleLogin.addEventListener('click', handleGoogleLogin);
+            tutorMode.addEventListener('click', () => switchMode('tutor'));
+            speedTestMode.addEventListener('click', () => switchMode('speedtest'));
+            typingInput.addEventListener('input', handleTypingInput);
+            typingInput.addEventListener('keydown', handleKeyDown);
+            typingInput.addEventListener('keyup', handleKeyUp);
+            popupClose.addEventListener('click', closeResultPopup);
+            
+            leaderboardTabs.forEach(tab => {
+                tab.addEventListener('click', () => switchLeaderboardTab(tab.dataset.tab));
+            });
+
+            // Set initial typing prompt
+            updateTypingPrompt('letters');
+            
+            // Simulate user login for demo purposes
+            // In a real app, this would be handled by Firebase Auth
+            simulateLogin();
+        }
+
+        // Simulate user login for demo
+        function simulateLogin() {
+            appState.user = {
+                displayName: 'CyberTyper',
+                email: 'user@typearena.com',
+                photoURL: null
+            };
+            
+            // Update UI
+            userAvatar.textContent = appState.user.displayName.charAt(0);
+            
+            // Show app, hide auth
+            authPanel.style.display = 'none';
+            app.style.display = 'block';
+        }
+
+        // Handle Google login
+        function handleGoogleLogin() {
+            // In a real implementation, this would use Firebase Auth
+            // For demo purposes, we'll simulate a login
+            simulateLogin();
+            
+            // Show a glitch effect
+            document.querySelector('.logo').classList.add('glitch');
+            setTimeout(() => {
+                document.querySelector('.logo').classList.remove('glitch');
+            }, 1000);
+        }
+
+        // Switch between tutor and speed test modes
+        function switchMode(mode) {
+            appState.mode = mode;
+            
+            // Update UI
+            if (mode === 'tutor') {
+                tutorMode.classList.add('active');
+                speedTestMode.classList.remove('active');
+                typingInput.placeholder = "Start typing the text above...";
+                resetTest();
+                updateTypingPrompt('letters');
+            } else {
+                tutorMode.classList.remove('active');
+                speedTestMode.classList.add('active');
+                typingInput.placeholder = "Get ready for the speed test...";
+                resetTest();
+                showSpeedTestOptions();
+            }
+        }
+
+        // Show speed test duration options
+        function showSpeedTestOptions() {
+            typingPrompt.innerHTML = `
+                <h3>SELECT TEST DURATION</h3>
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                    <button class="mode-btn" data-duration="30">30 SECONDS</button>
+                    <button class="mode-btn" data-duration="60">1 MINUTE</button>
+                    <button class="mode-btn" data-duration="120">2 MINUTES</button>
+                    <button class="mode-btn" data-duration="300">5 MINUTES</button>
+                </div>
+            `;
+            
+            // Add event listeners to duration buttons
+            const durationButtons = typingPrompt.querySelectorAll('.mode-btn');
+            durationButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const duration = parseInt(button.dataset.duration);
+                    startSpeedTest(duration);
+                });
+            });
+            
+            typingInput.value = '';
+            typingInput.disabled = true;
+        }
+
+        // Start a speed test with the specified duration
+        function startSpeedTest(duration) {
+            appState.testDuration = duration;
+            appState.isTyping = true;
+            appState.timeElapsed = 0;
+            appState.charsTyped = 0;
+            appState.errors = 0;
+            
+            // Select a random paragraph for the test
+            const texts = Object.values(sampleTexts);
+            const randomText = texts[Math.floor(Math.random() * texts.length)];
+            typingPrompt.textContent = randomText;
+            
+            // Enable typing input
+            typingInput.disabled = false;
+            typingInput.value = '';
+            typingInput.focus();
+            
+            // Start timer
+            startTimer();
+        }
+
+        // Start the test timer
+        function startTimer() {
+            clearInterval(appState.timer);
+            appState.timer = setInterval(() => {
+                appState.timeElapsed++;
+                updateStats();
+                
+                // Check if test is complete
+                if (appState.mode === 'speedtest' && appState.timeElapsed >= appState.testDuration) {
+                    completeTest();
+                }
+            }, 1000);
+        }
+
+        // Handle typing input
+        function handleTypingInput(e) {
+            if (!appState.isTyping && appState.mode === 'tutor') {
+                appState.isTyping = true;
+                startTimer();
+            }
+            
+            const inputText = typingInput.value;
+            const promptText = typingPrompt.textContent;
+            
+            appState.charsTyped = inputText.length;
+            
+            // Calculate errors
+            let errors = 0;
+            for (let i = 0; i < inputText.length; i++) {
+                if (inputText[i] !== promptText[i]) {
+                    errors++;
+                }
+            }
+            appState.errors = errors;
+            
+            // Calculate accuracy
+            appState.accuracy = appState.charsTyped > 0 ? 
+                Math.max(0, Math.round(((appState.charsTyped - appState.errors) / appState.charsTyped) * 100)) : 100;
+            
+            // Calculate WPM (assuming 5 characters per word)
+            const words = appState.charsTyped / 5;
+            const minutes = appState.timeElapsed / 60;
+            appState.wpm = minutes > 0 ? Math.round(words / minutes) : 0;
+            
+            updateStats();
+            
+            // Check if text is completed (tutor mode)
+            if (appState.mode === 'tutor' && inputText === promptText) {
+                completeTest();
+            }
+        }
+
+        // Handle key down events for keyboard visualization
+        function handleKeyDown(e) {
+            const key = e.key.toLowerCase();
+            const keyElement = document.querySelector(`.key[data-key="${key}"]`) || 
+                              document.querySelector(`.key[data-key=" "]`);
+            
+            if (keyElement) {
+                keyElement.classList.add('active');
+            }
+        }
+
+        // Handle key up events for keyboard visualization
+        function handleKeyUp(e) {
+            const key = e.key.toLowerCase();
+            const keyElement = document.querySelector(`.key[data-key="${key}"]`) || 
+                              document.querySelector(`.key[data-key=" "]`);
+            
+            if (keyElement) {
+                keyElement.classList.remove('active');
+            }
+        }
+
+        // Update statistics display
+        function updateStats() {
+            wpmValue.textContent = appState.wpm;
+            accuracyValue.textContent = `${appState.accuracy}%`;
+            timeValue.textContent = `${appState.timeElapsed}s`;
+            charsValue.textContent = appState.charsTyped;
+        }
+
+        // Complete the current test
+        function completeTest() {
+            clearInterval(appState.timer);
+            appState.isTyping = false;
+            
+            // Show result popup
+            showResultPopup();
+            
+            // In a real app, save results to Firebase
+        }
+
+        // Show the result popup
+        function showResultPopup() {
+            popupWpm.textContent = appState.wpm;
+            popupAccuracy.textContent = `${appState.accuracy}%`;
+            resultPopup.style.display = 'block';
+        }
+
+        // Close the result popup
+        function closeResultPopup() {
+            resultPopup.style.display = 'none';
+            
+            if (appState.mode === 'speedtest') {
+                showSpeedTestOptions();
+            } else {
+                // Advance to next level in tutor mode
+                advanceTutorLevel();
+            }
+        }
+
+        // Advance to the next level in tutor mode
+        function advanceTutorLevel() {
+            const levels = ['letters', 'words', 'sentences', 'paragraphs'];
+            const currentLevel = levels.find(level => 
+                typingPrompt.textContent === sampleTexts[level]
+            );
+            
+            let nextLevel = 'letters'; // Default to first level
+            
+            if (currentLevel) {
+                const currentIndex = levels.indexOf(currentLevel);
+                nextLevel = levels[(currentIndex + 1) % levels.length];
+            }
+            
+            updateTypingPrompt(nextLevel);
+            resetTest();
+            
+            // Show glitch animation when leveling up
+            if (currentLevel && nextLevel !== 'letters') {
+                typingPrompt.classList.add('glitch');
+                setTimeout(() => {
+                    typingPrompt.classList.remove('glitch');
+                }, 1000);
+            }
+        }
+
+        // Update the typing prompt based on level
+        function updateTypingPrompt(level) {
+            typingPrompt.textContent = sampleTexts[level];
+        }
+
+        // Reset test state
+        function resetTest() {
+            clearInterval(appState.timer);
+            appState.isTyping = false;
+            appState.timeElapsed = 0;
+            appState.wpm = 0;
+            appState.accuracy = 100;
+            appState.charsTyped = 0;
+            appState.errors = 0;
+            typingInput.value = '';
+            typingInput.disabled = false;
+            updateStats();
+        }
+
+        // Switch between leaderboard tabs
+        function switchLeaderboardTab(tab) {
+            leaderboardTabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`.leaderboard-tab[data-tab="${tab}"]`).classList.add('active');
+            
+            // Update leaderboard content
+            if (tab === 'wpm') {
+                leaderboardList.innerHTML = `
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">1</span>
+                        <span class="leaderboard-name">NeonNinja</span>
+                        <span class="leaderboard-score">128 WPM</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">2</span>
+                        <span class="leaderboard-name">CyberSamurai</span>
+                        <span class="leaderboard-score">115 WPM</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">3</span>
+                        <span class="leaderboard-name">GlitchMaster</span>
+                        <span class="leaderboard-score">104 WPM</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">4</span>
+                        <span class="leaderboard-name">ByteRunner</span>
+                        <span class="leaderboard-score">98 WPM</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">5</span>
+                        <span class="leaderboard-name">DataDrifter</span>
+                        <span class="leaderboard-score">92 WPM</span>
+                    </li>
+                `;
+            } else {
+                leaderboardList.innerHTML = `
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">1</span>
+                        <span class="leaderboard-name">AccuracyMaster</span>
+                        <span class="leaderboard-score">99.8%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">2</span>
+                        <span class="leaderboard-name">PrecisionPro</span>
+                        <span class="leaderboard-score">99.5%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">3</span>
+                        <span class="leaderboard-name">ErrorHunter</span>
+                        <span class="leaderboard-score">99.2%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">4</span>
+                        <span class="leaderboard-name">FlawlessTyper</span>
+                        <span class="leaderboard-score">98.9%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">5</span>
+                        <span class="leaderboard-name">PerfectStrike</span>
+                        <span class="leaderboard-score">98.5%</span>
+                    </li>
+                `;
+            }
+        }
+
+        // Initialize the app when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
